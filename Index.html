@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Hub - Premium Store</title>
+    <!-- Google Font Import -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Basic Setup with New Font */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header & Hero Section */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800');
+            background-size: cover;
+            background-position: center;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* টেক্সট বোঝার জন্য ডার্ক লেয়ার */
+        }
+        .hero-content {
+            position: relative;
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* টেক্সট গ্লো/শ্যাডো */
+            animation: fadeIn 1s ease;
+        }
+        .hero-content h2 { font-size: 28px; font-weight: 700; }
+        .hero-content p { font-size: 16px; font-weight: 300; }
+
+        /* Container */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Grid for Categories & Products */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Cards Design with Effects */
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .card:active {
+            transform: scale(0.95); /* ক্লিক করার সময় স্পেশাল এফেক্ট */
+        }
+        .card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .card-info {
+            padding: 12px;
+            text-align: center;
+        }
+        .card-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .card-price {
+            color: #e74c3c;
+            font-weight: 700;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(231, 76, 60, 0.3);
+        }
+        .back-btn:active { transform: scale(0.95); }
+
+        /* Modal / Pop-up for Product Details */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .modal-content img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .modal-title { font-size: 22px; font-weight: 700; margin: 15px 0 5px; color: #2c3e50;}
+        .modal-price { font-size: 20px; color: #e74c3c; font-weight: 700; margin-bottom: 10px;}
+        .modal-desc { font-size: 14px; color: #666; margin-bottom: 20px; }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn {
+            display: block;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+        }
+        .whatsapp-btn:active { transform: scale(0.98); }
+
+        /* Views (Hide/Show) */
+        #products-view { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fashion Hub</h1>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h2>Trending Collections</h2>
+            <p>Style that speaks for you.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- View 1: Main Categories -->
+        <div id="categories-view">
+            <h2 class="section-title">Explore Categories</h2>
+            <div class="grid-container">
+                <!-- Check Shirts -->
+                <div class="card" onclick="openCategory('checkShirts')">
+                    <img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300" alt="Check Shirts">
+                    <div class="card-info">
+                        <h3>Check Shirts</h3>
+                    </div>
+                </div>
+                <!-- T-Shirts -->
+                <div class="card" onclick="openCategory('tshirts')">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300" alt="T-Shirts">
+                    <div class="card-info">
+                        <h3>T-Shirts</h3>
+                    </div>
+                </div>
+                <!-- Linens -->
+                <div class="card" onclick="openCategory('linens')">
+                    <img src="https://images.unsplash.com/photo-1596755094514-f87e32f85e23?w=300" alt="Linens">
+                    <div class="card-info">
+                        <h3>Premium Linen</h3>
+                    </div>
+                </div>
+                <!-- Jeans -->
+                <div class="card" onclick="openCategory('jeans')">
+                    <img src="https://images.unsplash.com/photo-1542272604-780c8d5215fe?w=300" alt="Jeans">
+                    <div class="card-info">
+                        <h3>Denim Jeans</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Inside a Category (Products) -->
+        <div id="products-view">
+            <button class="back-btn" onclick="goBack()">🔙 Back</button>
+            <h2 class="section-title" id="category-title">Items</h2>
+            <div class="grid-container" id="products-list">
+                <!-- Products will be generated here by JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- The Modal (Product Details Pop-up) -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modal-img" src="" alt="Product">
+            <h3 class="modal-title" id="modal-title">Name</h3>
+            <div class="modal-price" id="modal-price">Price</div>
+            <p class="modal-desc" id="modal-desc">Description</p>
+            <a href="#" id="modal-whatsapp" class="whatsapp-btn">🛒 Order on WhatsApp</a>
+        </div>
+    </div>
+
+    <!-- JavaScript For Interactivity -->
+    <script>
+        // Store Data (All products details are saved here)
+        const storeData = {
+            'checkShirts': {
+                title: "Check Shirts Collection",
+                items: [
+                    { name: "Red Casual Check", price: "₹ 699", img: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300", desc: "100% Pure cotton. Perfect for daily wear." },
+                    { name: "Blue Formal Check", price: "₹ 850", img: "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=300", desc: "Premium fabric. Slim fit for formal look." },
+                    { name: "Black Grid Shirt", price: "₹ 750", img: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?w=300", desc: "Stylish grid pattern. Comfortable summer wear." }
+                ]
+            },
+            'tshirts': {
+                title: "Trendy T-Shirts",
+                items: [
+                    { name: "Solid Black Tee", price: "₹ 399", img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300", desc: "Round neck, 100% cotton bio-washed." },
+                    { name: "Graphic Print Tee", price: "₹ 499", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=300", desc: "High quality print. Oversized fit." }
+                ]
+            },
+            'linens': {
+                title: "Premium Linens",
+                items: [
+                    { name: "White Linen Shirt", price: "₹ 999", img: "https://images.unsplash.com/photo-1596755094514-f87e32f85e23?w=300", desc: "Breathable pure linen. Best for summer." },
+                    { name: "Olive Linen Trouser", price: "₹ 1100", img: "https://images.unsplash.com/photo-1624378439575-d1ead6bbd7c6?w=300", desc: "Comfortable stretch linen trouser." }
+                ]
+            },
+            'jeans': {
+                title: "Denim Jeans",
+                items: [
+                    { name: "Classic Blue Denim", price: "₹ 899", img: "https://images.unsplash.com/photo-1542272604-780c8d5215fe?w=300", desc: "Straight fit classic blue washed denim." },
+                    { name: "Black Ripped Jeans", price: "₹ 1050", img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300", desc: "Ankle length ripped stylish jeans." }
+                ]
+            }
+        };
+
+        // UI Elements
+        const categoriesView = document.getElementById('categories-view');
+        const productsView = document.getElementById('products-view');
+        const productsList = document.getElementById('products-list');
+        const categoryTitle = document.getElementById('category-title');
+        const modal = document.getElementById('productModal');
+
+        // Function to open a category
+        function openCategory(catId) {
+            const category = storeData[catId];
+            categoryTitle.innerText = category.title;
+            productsList.innerHTML = ''; // Clear old items
+
+            // Generate HTML for each item in that category
+            category.items.forEach(item => {
+                const itemHTML = `
+                    <div class="card" onclick="openModal('${item.name}', '${item.price}', '${item.img}', '${item.desc}')">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="card-info">
+                            <h3>${item.name}</h3>
+                            <div class="card-price">${item.price}</div>
+                        </div>
+                    </div>
+                `;
+                productsList.innerHTML += itemHTML;
+            });
+
+            // Switch views
+            categoriesView.style.display = 'none';
+            productsView.style.display = 'block';
+        }
+
+        // Function to go back to categories
+        function goBack() {
+            productsView.style.display = 'none';
+            categoriesView.style.display = 'block';
+        }
+
+        // Function to open Modal (Pop-up)
+        function openModal(name, price, img, desc) {
+            document.getElementById('modal-img').src = img;
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-price').innerText = price;
+            document.getElementById('modal-desc').innerText = desc;
+            
+            // Generate WhatsApp Link
+            const whatsappNumber = "919876543210"; // Ekhane dokaner number hobe
+            const message = `Ami ei jamati kinte chai: ${name} (${price})`;
+            document.getElementById('modal-whatsapp').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+            modal.style.display = 'flex';
+        }
+
+        // Function to close Modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
